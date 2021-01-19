@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:orientation="horizontal" >
+
+
+    <TextView
+        android:id="@+id/tx_uuid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize = "14sp"
+        android:text="TextView"
+        android:padding="8dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="MAJOR" />
+            <TextView
+                android:id="@+id/tx_major"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="10" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="MINOR" />
+            <TextView
+                android:id="@+id/tx_minor"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="10" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="RSSI" />
+            <TextView
+                android:id="@+id/tx_rssi"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="10" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="DIST" />
+            <TextView
+                android:id="@+id/tx_dist"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:textSize = "14sp"
+                android:gravity="center|left"
+                android:text="10" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
