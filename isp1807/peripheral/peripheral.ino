@@ -34,6 +34,11 @@ int fname=0;
 
 int data_num=0;
 
+
+int board = 0; // breakout board
+//int board = 1; // ss ble dev board
+
+
 void setup()
 {
   Serial.begin(115200);
@@ -135,25 +140,28 @@ void loop()
   char* bufp = buf;
 
 
-//  float temp = LM75B_get_temp(0x48);
-//  sprintf(buf, "{\"temp\":%.2f}", temp);
-//  int cnt = strlen(buf);
-//
-//  if( state == CONNECTED ){
-//    send(buf, cnt);
-//  }  
-
-  float temp = LM75B_get_temp(0x48);
-  sprintf(buf, "{\"temp\":%.2f}\n", temp);
-  Serial.print(buf);
-
+  float temp,humi = 0;
+  if( board == 0 ){
+    
+    temp = LM75B_get_temp(0x48);
+    sprintf(buf, "{\"temp\":%.2f}\n", temp);
+    Serial.print(buf);
+    
+  }else{
+    
+    SS_BLE_DEV_HDC2010_get_temp(&temp, &humi);
+    sprintf(buf, "{\"temp\":%.2f, \"humid\":%.2f}\n", temp,humi);
+    Serial.print(buf);
+    
+  }
+  
   int cnt = strlen(buf);
 
   if( state == CONNECTED ){
 
-    Serial.println("read");
-    readline(FILENAME);
-    deleteFile(FILENAME);
+//    Serial.println("read");
+//    readline(FILENAME);
+//    deleteFile(FILENAME);
 
     Serial.println("send");
     send(buf, cnt);
@@ -161,10 +169,10 @@ void loop()
   }else{
     
     Serial.println("save");
-    saveFile( FILENAME, buf, cnt);
+//    saveFile( FILENAME, buf, cnt);
   }
 
-  delay(10000);
+  delay(30000);
 }
 
 
@@ -216,7 +224,6 @@ float LM75B_get_temp(uint8_t addr){
   
   return temp;
 }
-
 
 /**
  * FS
@@ -315,4 +322,57 @@ void saveFile(char* filename, char* buf, int len){
   }
   
   InternalFS.end();
+}
+
+
+
+/*
+ * 
+ * SS BLE DEV BOARD
+ */
+int HDC2010 = 0x40;
+ 
+ void writeReg(uint8_t addr, uint8_t dat)
+{
+  Wire.beginTransmission(HDC2010);
+  Wire.write(addr);
+  Wire.write(dat);
+  Wire.endTransmission();
+}
+
+void readReg(uint8_t addr, uint8_t *buf, uint8_t buflen)
+{
+  Wire.beginTransmission(HDC2010);
+  Wire.write(addr);
+  Wire.endTransmission(false);
+  Wire.requestFrom(HDC2010, buflen);
+  while (Wire.available() < buflen)
+    delay(1);
+  for (int i = 0; i < buflen; i++) {
+    *buf = Wire.read(); buf++;
+  }
+}
+
+void SS_BLE_DEV_HDC2010_get_temp(float *temp, float* humi){
+
+  Wire.begin();
+
+  writeReg(0x0E, 0x80);// Soft Reset
+  delay(10);
+  writeReg(0x0E, 0x50); // 1Hz
+  writeReg(0x0F, 0x01); // Humidity + Temperature/both 14bit/Start measurement
+
+  delay(10);
+  uint8_t buf[2];
+  readReg(0x00, buf, 2);
+  int t = buf[0] | buf[1] << 8;
+  *temp = (t * 165.0) / 65536.0 - 40;
+
+  delay(10);
+  readReg(0x02, buf, 2);
+  t = buf[0] | buf[1] << 8;
+  *humi = (t * 100.0) / 65536.0;
+
+  Wire.end();
+
 }
