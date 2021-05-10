@@ -297,7 +297,7 @@ void loop() {
 
   // sleep
   sleepLM75(0x90,true);
-  delay(5000);
+  delay(600000);
 
 }
 
